@@ -75,7 +75,6 @@ bool DBParser::parse(string db_filename, DataStore& ds)
                     if(error_) {
                         lineno_ = startLineNo;
                     }
-
                 }
                 else {
                     cerr << "No section parser available for " << sectionName << "..skipping!" << endl;
