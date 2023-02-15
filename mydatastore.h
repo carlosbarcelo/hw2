@@ -14,6 +14,12 @@ class MyDataStore: public DataStore{
 
     void dump(std::ostream& ofile);
 
+    std::map<std::string, Product*> keyprods_;
+
     std::map<std::string, Product*> prods_;
     std::map<std::string, User*> users_;
+
+    //map of each username to their cart
+    std::map<std::string, std::vector<Product*>> carts_;
+
 };

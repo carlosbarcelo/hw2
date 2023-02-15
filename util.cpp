@@ -17,15 +17,15 @@ std::set<std::string> parseStringToWords(string rawWords)
 {
   set<string> keys;
   string subst = "";
-  for(size_t i = 0; i < rawWords.size(); i++){
-    if(rawWords[i] >= 'a' && rawWords[i] <= 'z'){
+  for(size_t i = 0; i <= rawWords.size(); i++){
+    if(i < rawWords.size() && rawWords[i] >= 'a' && rawWords[i] <= 'z'){
       subst += rawWords[i];
     }
-    else if(rawWords[i] >= 'A' && rawWords[i] <= 'Z'){
+    else if(i < rawWords.size() && rawWords[i] >= 'A' && rawWords[i] <= 'Z'){
       subst += rawWords[i]+32;
     }
     else{
-      if(subst.size() < 1){
+      if(subst.size() > 1){
         keys.insert(subst);
       }
       subst.assign("");

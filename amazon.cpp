@@ -93,6 +93,72 @@ int main(int argc, char* argv[])
                 hits = ds.search(terms, 1);
                 displayProducts(hits);
             }
+            else if ( cmd == "ADD" ) {
+              string username;
+              size_t hri;
+              if(ss >> username && ss >> hri) {
+                  map<string, vector<Product*>>::iterator it = ds.carts_.find(username);
+                  hri --;
+                  if(hri >= hits.size() || hri < 0){
+                    cout << "Invalid request" << endl;                     
+                  }
+                  else if(it != ds.carts_.end()){
+                      it->second.push_back(hits[hri]);
+                  }
+                  else{
+                      if(ds.users_.find(username) != ds.users_.end()){
+                        vector<Product*> prod;
+                        prod.push_back(hits[hri]);
+                        ds.carts_.insert(make_pair(username, prod));
+                      }
+                      else{
+                          cout << "Invalid request" << endl;
+                      }
+                    }
+                  }
+            }
+            else if ( cmd == "VIEWCART" ) {
+                string username;
+                if(ss >> username){
+                    if(ds.users_.find(username) != ds.users_.end()){
+                    map<string, vector<Product*>>::iterator it = ds.carts_.find(username);
+                        if(it != ds.carts_.end()){
+                            for(size_t i = 0; i < it->second.size(); i++){
+                                cout << i+1 << ":  " << it->second[i]->displayString() << endl << endl;
+                            }
+                        }
+                    }
+                    else{
+                        cout << "Invalid username" << endl;
+                    }
+                }
+            }
+            else if ( cmd == "BUYCART" ) {
+                string username;
+                if(ss >> username){
+                    if(ds.users_.find(username) != ds.users_.end()){
+                    map<string, vector<Product*>>::iterator it = ds.carts_.find(username);
+                        if(it != ds.carts_.end()){
+                            std::map<std::string, User*>::iterator uit = ds.users_.find(username);
+                            size_t sizey = it->second.size();
+                            for(size_t i = 0; i < sizey; i++){
+                                Product* buy = it->second[i]; 
+                                User* buyer = uit->second;
+                                if(buy->getQty() > 0 && buy->getPrice() <= buyer->getBalance()){
+                                    buyer->deductAmount(buy->getPrice());
+                                    buy->subtractQty(1);
+                                    it->second.erase(it->second.begin() + i);
+                                    i--;
+                                    sizey--;
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        cout << "Invalid username" << endl;
+                    }
+                }
+            }
             else if ( cmd == "QUIT") {
                 string filename;
                 if(ss >> filename) {
